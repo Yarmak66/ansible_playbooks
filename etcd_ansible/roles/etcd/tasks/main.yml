@@ -1,0 +1,31 @@
+- name: Remove old WAL files
+  command: rm -rf /var/lib/etcd/member/wal/*
+  ignore_errors: yes
+
+- name: Remove old snapshot files
+  command: rm -rf /var/lib/etcd/member/snap/*
+  ignore_errors: yes
+
+- name: Install ETCD
+  apt:
+    name: etcd
+    state: present
+
+- name: Get the specific IP address from the network interface enp0s3
+  shell: ip -o -f inet addr show enp0s3 | awk '{print $4}' | cut -d'/' -f1
+  register: ip_result
+
+- name: Set fact for etcd_ip
+  set_fact:
+    HOST_IP: "{{ ip_result.stdout }}"
+
+- name: Create ETCD config from template
+  template:
+    src: etcd_config.j2
+    dest: "{{ DEST_FOR_CONFIG_FILE }}/etcd"
+
+- name: Start and enable ETCD service
+  systemd:
+    name: etcd
+    enabled: yes
+    state: started
