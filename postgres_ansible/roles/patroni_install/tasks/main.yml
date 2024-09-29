@@ -16,7 +16,7 @@
 - name: Copy Patroni config file
   template:
     src: patroni_config.j2  # Укажите путь к шаблону
-    dest: /etc/patroni.yml
+    dest: /etc/patroni/config.yml
     mode: '0644'    # Установите права доступа
 
 - name: Copy WAL script and make it executable for all
