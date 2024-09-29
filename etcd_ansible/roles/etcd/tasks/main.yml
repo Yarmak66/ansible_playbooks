@@ -1,9 +1,5 @@
 - name: Remove old WAL files
-  command: rm -rf /var/lib/etcd/member/wal/*
-  ignore_errors: yes
-
-- name: Remove old snapshot files
-  command: rm -rf /var/lib/etcd/member/snap/*
+  command: rm -rf /var/lib/etcd/*
   ignore_errors: yes
 
 - name: Install ETCD

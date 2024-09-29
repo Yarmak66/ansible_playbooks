@@ -1,0 +1,17 @@
+- name: Stop and disable ETCD service
+  systemd:
+    name: etcd
+    enabled: no
+    state: stopped
+
+
+- name: Remove old files
+  command: rm -rf /var/lib/etcd/*
+  ignore_errors: yes
+
+
+- name: Start and enable ETCD service
+  systemd:
+    name: etcd
+    enabled: yes
+    state: started

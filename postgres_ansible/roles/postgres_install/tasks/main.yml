@@ -1,0 +1,14 @@
+- name: Обновить список доступных пакетов
+  apt:
+    update_cache: yes
+
+- name: Установить PostgreSQL
+  apt:
+    name: postgresql
+    state: present
+
+- name: Выключить сервис PostgreSQL
+  systemd:
+    name: postgresql
+    enabled: no
+    state: stopped

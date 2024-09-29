@@ -1,0 +1,8 @@
+---
+- name: Install Patroni and configure
+  hosts: db_nodes
+  become: yes
+  vars_files:
+    - vault.txt
+  roles:
+    - patroni_install

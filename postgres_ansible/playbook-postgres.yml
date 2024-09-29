@@ -1,0 +1,8 @@
+---
+- name: Install PostgresSQL DB
+  hosts: db_nodes
+  become: yes
+  vars_files:
+    - vault.txt
+  roles:
+    - postgres_install

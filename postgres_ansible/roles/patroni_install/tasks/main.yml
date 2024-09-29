@@ -1,0 +1,31 @@
+- name: Get the specific IP address from the network interface enp0s3
+  shell: ip -o -f inet addr show enp0s3 | awk '{print $4}' | cut -d'/' -f1
+  register: ip_result
+
+- name: Set fact for pratoni config file
+  set_fact:
+    INTERFACE_IP: "{{ ip_result.stdout }}"
+
+
+- name: Install Patroni
+  apt:
+    name:
+      - patroni
+    state: present
+
+- name: Copy Patroni config file
+  template:
+    src: patroni_config.j2  # Укажите путь к шаблону
+    dest: /etc/patroni.yml
+    mode: '0644'    # Установите права доступа
+
+- name: Copy WAL script and make it executable for all
+  template:
+    src: copy_wal.sh  # Укажите путь к шаблону
+    dest: /usr/local/bin/copy_wal.sh
+    mode: '0755'  # Установите права доступа, чтобы скрипт был исполняемым
+
+- name: Ensure the WAL script is executable for all users
+  file:
+    path: /usr/local/bin/copy_wal.sh
+    mode: '0755'  # Установите права доступа для всех
